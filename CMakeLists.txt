@@ -27,8 +27,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin") # .exe
 endif()
 
-option(FG_BUILD_TEST "Build unit tests" ON)
-
 add_library(FrameGraph
   "include/fg/TypeTraits.hpp"
   "include/fg/FrameGraphResource.hpp"
@@ -59,10 +57,6 @@ target_include_directories(
 
 add_library(fg::FrameGraph ALIAS FrameGraph)
 
-if(FG_BUILD_TEST)
-  enable_testing()
-  add_subdirectory(tests)
-endif()
 
 include(GNUInstallDirs)
 install(

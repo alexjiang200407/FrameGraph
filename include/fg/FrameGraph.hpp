@@ -17,7 +17,7 @@ public:
 
   friend std::ostream &operator<<(std::ostream &, const FrameGraph &);
 
-  static constexpr auto kFlagsIgnored = ~0;
+  static constexpr uint32_t kFlagsIgnored = ~0u;
 
   class Builder final {
     friend class FrameGraph;
