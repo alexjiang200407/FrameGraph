@@ -34,6 +34,12 @@ public:
     /** Declares the creation of a resource. */
     [[nodiscard]] FrameGraphResource create(const std::string_view name,
                                             const typename T::Desc &);
+
+    template <_VIRTUALIZABLE_CONCEPT(T)>
+    /** Declares the creation of a resource. */
+    [[nodiscard]] FrameGraphResource create(const std::string_view name,
+                                            typename T::Desc &&);
+
     /** Declares read operation. */
     FrameGraphResource read(FrameGraphResource id,
                             uint32_t flags = kFlagsIgnored);
@@ -101,6 +107,11 @@ private:
   [[nodiscard]] FrameGraphResource _create(const ResourceEntry::Type,
                                            const std::string_view name,
                                            const typename T::Desc &, T &&);
+
+  template <_VIRTUALIZABLE_CONCEPT(T)>
+  [[nodiscard]] FrameGraphResource _create(const ResourceEntry::Type,
+                                           const std::string_view name,
+                                           typename T::Desc &&, T &&);
 
   [[nodiscard]] ResourceNode &
   _createResourceNode(const std::string_view name, uint32_t resourceId,

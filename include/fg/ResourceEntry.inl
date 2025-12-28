@@ -37,6 +37,13 @@ template <typename T> inline auto *ResourceEntry::_getModel() const {
   return model;
 }
 
+template <typename T>
+inline ResourceEntry::ResourceEntry(const Type type, uint32_t id,
+                                    typename T::Desc &&desc, T &&obj)
+    : m_type{type}, m_id{id}, m_version{kInitialVersion},
+      m_concept{std::make_unique<Model<T>>(std::forward<typename T::Desc>(desc),
+                                           std::forward<T>(obj))} {}
+
 //
 // ResourceEntry::Model class:
 //
@@ -44,6 +51,10 @@ template <typename T> inline auto *ResourceEntry::_getModel() const {
 template <typename T>
 inline ResourceEntry::Model<T>::Model(const typename T::Desc &desc, T &&obj)
     : descriptor{desc}, resource{std::move(obj)} {}
+
+template <typename T>
+inline ResourceEntry::Model<T>::Model(typename T::Desc &&desc, T &&obj)
+    : descriptor{std::move(desc)}, resource{std::move(obj)} {}
 
 template <typename T>
 inline void ResourceEntry::Model<T>::create(void *allocator) {

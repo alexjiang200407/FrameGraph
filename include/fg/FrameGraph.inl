@@ -63,6 +63,17 @@ FrameGraph::_create(const ResourceEntry::Type type, const std::string_view name,
   return _createResourceNode(name, resourceId).getId();
 }
 
+template <_VIRTUALIZABLE_CONCEPT_IMPL(T)>
+inline FrameGraphResource
+FrameGraph::_create(const ResourceEntry::Type type, const std::string_view name,
+                    typename T::Desc &&desc, T &&resource) {
+  const auto resourceId = static_cast<uint32_t>(m_resourceRegistry.size());
+  m_resourceRegistry.emplace_back(
+    ResourceEntry{type, resourceId, std::forward<typename T::Desc>(desc),
+                  std::forward<T>(resource)});
+  return _createResourceNode(name, resourceId).getId();
+}
+
 //
 // FrameGraph::Builder class:
 //
@@ -73,6 +84,16 @@ FrameGraph::Builder::create(const std::string_view name,
                             const typename T::Desc &desc) {
   const auto id =
     m_frameGraph._create<T>(ResourceEntry::Type::Transient, name, desc, T{});
+  return m_passNode.m_creates.emplace_back(id);
+}
+
+template <_VIRTUALIZABLE_CONCEPT_IMPL(T)>
+inline FrameGraphResource
+FrameGraph::Builder::create(const std::string_view name,
+                            typename T::Desc &&desc) {
+  const auto id =
+    m_frameGraph._create<T>(ResourceEntry::Type::Transient, name,
+                            std::forward<typename T::Desc>(desc), T{});
   return m_passNode.m_creates.emplace_back(id);
 }
 

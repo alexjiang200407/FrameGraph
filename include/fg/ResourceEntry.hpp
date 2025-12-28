@@ -44,6 +44,9 @@ private:
   template <typename T>
   ResourceEntry(const Type, uint32_t id, const typename T::Desc &, T &&);
 
+  template <typename T>
+  ResourceEntry(const Type, uint32_t id, typename T::Desc &&, T &&);
+
   // http://www.cplusplus.com/articles/oz18T05o/
   // https://www.modernescpp.com/index.php/c-core-guidelines-type-erasure-with-templates
 
@@ -60,6 +63,7 @@ private:
   };
   template <typename T> struct Model final : Concept {
     Model(const typename T::Desc &, T &&);
+    Model(typename T::Desc &&, T &&);
 
     void create(void *allocator) override;
     void destroy(void *allocator) override;
