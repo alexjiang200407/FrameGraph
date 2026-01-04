@@ -54,7 +54,7 @@ void FrameGraph::compile() {
   // -- Calculate resources lifetime:
 
   for (auto &pass : m_passNodes) {
-    if (pass.m_refCount == 0) continue;
+    if (pass.m_refCount == 0 && !pass.hasSideEffect()) continue;
 
     for (const auto id : pass.m_creates)
       _getResourceEntry(id).m_producer = &pass;
